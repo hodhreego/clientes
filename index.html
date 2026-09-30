@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Páginas de clientes</title>
+<style>
+:root{ --bg:#faf8f4; --surface:#ffffff; --border:#dcd3c4; --ink:#241f18; --muted:#6b6154; --accent:#9a4b2f; color-scheme:light; }
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#1c1712; --surface:#28221b; --border:#3c3327; --ink:#f1ebe0; --muted:#a99d8b; --accent:#e08a63; color-scheme:dark; }
+}
+*{box-sizing:border-box}
+body{ background:var(--bg); color:var(--ink); margin:0; padding:40px 20px; font-family:"Source Serif 4",Georgia,serif; }
+.wrap{max-width:480px; margin:0 auto;}
+h1{ font-family:"Fraunces",Georgia,serif; font-weight:600; font-size:1.5rem; margin:0 0 22px; }
+ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;}
+li a{
+  display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:14px 16px; text-decoration:none; color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif; font-weight:600; font-size:.95rem;
+}
+li a .go{color:var(--accent); font-size:.85rem; margin-left:auto;}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="wrap">
+  <h1>Páginas de clientes</h1>
+  <ul>
+    <li><a href="vania.html">Vânia — Atividades de Espanhol<span class="go">Abrir →</span></a></li>
+  </ul>
+</div>
+</body>
+</html>
