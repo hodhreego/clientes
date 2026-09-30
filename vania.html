@@ -7,11 +7,11 @@
 <style>
 :root{
   --bg:#faf8f4; --surface:#ffffff; --border:#e4dbc9; --ink:#241f18; --muted:#7a6f5f; --accent:#9a4b2f;
-  --thumb1:#efe3cd; --thumb2:#dfcda6;
+  --thumb1:#efe3cd; --thumb2:#dfcda6; --green:#3f8a4c; --red:#c1402f;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark){
-  :root{ --bg:#1a1611; --surface:#252019; --border:#3c3327; --ink:#f1ebe0; --muted:#a99d8b; --accent:#e08a63; --thumb1:#3a3123; --thumb2:#4a3d2a; color-scheme:dark; }
+  :root{ --bg:#1a1611; --surface:#252019; --border:#3c3327; --ink:#f1ebe0; --muted:#a99d8b; --accent:#e08a63; --thumb1:#3a3123; --thumb2:#4a3d2a; --green:#5fb56d; --red:#e2685a; color-scheme:dark; }
 }
 *{box-sizing:border-box}
 body{
@@ -62,6 +62,24 @@ p.sub{
 .empty{ padding:10px 16px 16px; color:var(--muted); font-family:Arial,Helvetica,sans-serif; font-size:.84rem; }
 
 footer{ margin-top:24px; color:var(--muted); font-family:Arial,Helvetica,sans-serif; font-size:.78rem; text-align:center; }
+
+/* new activities (last 7 days): blinking green/red edge */
+.items a.new{ position:relative; }
+.items a.new::after{
+  content:""; position:absolute; inset:2px; border-radius:10px; border:2px solid var(--green);
+  animation:blink-edge 1.4s ease-in-out infinite; pointer-events:none;
+}
+.items a.new .badge{
+  position:absolute; top:2px; right:2px; font-family:Arial,Helvetica,sans-serif; font-size:.6rem; font-weight:800;
+  color:#fff; background:var(--accent); border-radius:999px; padding:2px 6px; letter-spacing:.02em;
+}
+@keyframes blink-edge{
+  0%,100%{ border-color:var(--green); box-shadow:0 0 0 0 color-mix(in srgb, var(--green) 45%, transparent); }
+  50%{ border-color:var(--red); box-shadow:0 0 0 2px color-mix(in srgb, var(--red) 30%, transparent); }
+}
+@media (prefers-reduced-motion: reduce){
+  .items a.new::after{ animation:none; border-color:var(--green); }
+}
 
 /* ---- thumbnails drawn purely in HTML/CSS, no images ---- */
 .thumb-sm{
@@ -148,10 +166,10 @@ footer{ margin-top:24px; color:var(--muted); font-family:Arial,Helvetica,sans-se
         <span class="cat-count">5</span>
       </div>
       <div class="items">
-        <a href="https://drive.google.com/drive/folders/1WfD0yEOcH-oKXB7Gnwxstv5ynt4MhFf3" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-ball"><i></i></span></span><span class="name">Niño juega fútbol</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/1dfu0KF-8CEEeSJ9vHtBQ7QaSzimdC3my" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-paw"><i></i><i></i><i></i><i></i></span></span><span class="name">Niña y su mascota</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/19BIWkiwdmTdif_BFmwtCdQK71R6_tLJo" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-grid"><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i></span></span><span class="name">Cruzadinha — animales y juguetes</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/1jvO03sSgl9BwN5T5zhF291ksiMbygtRl" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-coin"><i></i><i></i></span></span><span class="name">Dinero de Argentina y Paraguay</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1WfD0yEOcH-oKXB7Gnwxstv5ynt4MhFf3" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-ball"><i></i></span></span><span class="name">Niño juega fútbol</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1dfu0KF-8CEEeSJ9vHtBQ7QaSzimdC3my" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-paw"><i></i><i></i><i></i><i></i></span></span><span class="name">Niña y su mascota</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/19BIWkiwdmTdif_BFmwtCdQK71R6_tLJo" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-grid"><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i></span></span><span class="name">Cruzadinha — animales y juguetes</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1jvO03sSgl9BwN5T5zhF291ksiMbygtRl" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-coin"><i></i><i></i></span></span><span class="name">Dinero de Argentina y Paraguay</span><span class="go">Abrir →</span></a>
         <a href="https://drive.google.com/drive/folders/19GFOHCUYqdnpy8LuyJVmy1Fctsz7_KXt" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-lines"><b></b><i></i><i></i><i></i><i></i></span></span><span class="name">Apostila — vocabulario geral</span><span class="go">Abrir →</span></a>
       </div>
     </section>
@@ -163,11 +181,11 @@ footer{ margin-top:24px; color:var(--muted); font-family:Arial,Helvetica,sans-se
         <span class="cat-count">5</span>
       </div>
       <div class="items">
-        <a href="https://drive.google.com/drive/folders/1CoRxAs-wi1oYbLRciPJrSrTnrbg2jr2S" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-chat"><i></i><i></i></span></span><span class="name">El teléndro — un informático</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/1pMvbq7iyGPRloz3RI9w0RLOzodWnfBYj" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-leaf"><i></i></span></span><span class="name">Incubadora Biopark</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/1ONZJkRkooETmFpdueQB00ukQd0HGFADS" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-chat"><i></i><i></i></span></span><span class="name">Softlanding — networking</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/1EYON3oZTXmjgA5FdWV6lQj8GKeJ5hMao" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-target"><b></b></span></span><span class="name">Enigma</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/1u281k4GGtP4PHu2Y2QwEi7qbsCUE_bMS" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-grid"><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></span></span><span class="name">Cruzadinha — negocios</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1CoRxAs-wi1oYbLRciPJrSrTnrbg2jr2S" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-chat"><i></i><i></i></span></span><span class="name">El teléndro — un informático</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1pMvbq7iyGPRloz3RI9w0RLOzodWnfBYj" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-leaf"><i></i></span></span><span class="name">Incubadora Biopark</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1ONZJkRkooETmFpdueQB00ukQd0HGFADS" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-chat"><i></i><i></i></span></span><span class="name">Softlanding — networking</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1EYON3oZTXmjgA5FdWV6lQj8GKeJ5hMao" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-target"><b></b></span></span><span class="name">Enigma</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1u281k4GGtP4PHu2Y2QwEi7qbsCUE_bMS" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-grid"><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></span></span><span class="name">Cruzadinha — negocios</span><span class="go">Abrir →</span></a>
       </div>
     </section>
 
@@ -193,7 +211,7 @@ footer{ margin-top:24px; color:var(--muted); font-family:Arial,Helvetica,sans-se
         <span class="cat-count">2</span>
       </div>
       <div class="items">
-        <a href="https://drive.google.com/drive/folders/1UwFdJC0fDuLkQc6vusoXCChcn8TE6Kgz" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-grid"><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></span></span><span class="name">Cruzadinha — preposiciones</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1UwFdJC0fDuLkQc6vusoXCChcn8TE6Kgz" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-grid"><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></span></span><span class="name">Cruzadinha — preposiciones</span><span class="go">Abrir →</span></a>
         <a href="https://drive.google.com/drive/folders/1GP3lH0aAevdpsLyDNExDnLA3IRoXTSOl" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-lines"><b></b><i></i><i></i><i></i><i></i></span></span><span class="name">Ejercicios — contracciones/combinaciones</span><span class="go">Abrir →</span></a>
       </div>
     </section>
@@ -205,9 +223,9 @@ footer{ margin-top:24px; color:var(--muted); font-family:Arial,Helvetica,sans-se
         <span class="cat-count">5</span>
       </div>
       <div class="items">
-        <a href="https://drive.google.com/drive/folders/1V0UJkizlXy7w_Pl2dshbX2NXT3WWo1s6" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-leaf"><i></i></span></span><span class="name">Políticas ambientales — reforestación</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/1LPdaNkrtZezLB3UfKefrEPOG8H0lhyo3" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-leaf"><i></i></span></span><span class="name">Políticas ambientales — energía renovable</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/17GV1kWOoSfFym2_GsODCaBTQdjYETUoT" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-grid"><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i></span></span><span class="name">Cruzadinha — políticas ambientales</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1V0UJkizlXy7w_Pl2dshbX2NXT3WWo1s6" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-leaf"><i></i></span></span><span class="name">Políticas ambientales — reforestación</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1LPdaNkrtZezLB3UfKefrEPOG8H0lhyo3" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-leaf"><i></i></span></span><span class="name">Políticas ambientales — energía renovable</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/17GV1kWOoSfFym2_GsODCaBTQdjYETUoT" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-grid"><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i></span></span><span class="name">Cruzadinha — políticas ambientales</span><span class="go">Abrir →</span></a>
         <a href="https://drive.google.com/drive/folders/1fCrorfpqlo0zA9cZMdqqjWQGFOoaLj21" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-lines"><b></b><i></i><i></i><i></i><i></i></span></span><span class="name">Textos — políticas ambientales</span><span class="go">Abrir →</span></a>
         <a href="https://drive.google.com/drive/folders/1siE51skQwCnkXiQw0UuhggH7Cnmrfciv" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-lines"><b></b><i></i><i></i><i></i><i></i></span></span><span class="name">Ejercicios — políticas ambientales 2</span><span class="go">Abrir →</span></a>
       </div>
@@ -220,11 +238,11 @@ footer{ margin-top:24px; color:var(--muted); font-family:Arial,Helvetica,sans-se
         <span class="cat-count">5</span>
       </div>
       <div class="items">
-        <a href="https://drive.google.com/drive/folders/1g0iUl2IhwKC8VheXOdfFkUgTAyNwcMHD" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-chat"><i></i><i></i></span></span><span class="name">Intercambio estudiantil</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/1IW94TcGRmMEqFPl_enO2aQy1aWO7xwEr" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-plane"><i></i><i></i></span></span><span class="name">Mochilero por Sudamérica</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/1xRxUWHWQ8-4F0KMHgJQhRJpQBQVcWoNR" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-target"><b></b></span></span><span class="name">Enigma</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/1Xg978t5uvKfreaSaXdc6usJNnVQs4rMM" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-grid"><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i></span></span><span class="name">Cruzadinha — viajes</span><span class="go">Abrir →</span></a>
-        <a href="https://drive.google.com/drive/folders/1oAgPI0zK2quZemswVkqsWgpf3T9pGL0v" target="_blank" rel="noopener"><span class="thumb-sm"><span class="mini t-target"><b></b></span></span><span class="name">Preguntas sobre viaje</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1g0iUl2IhwKC8VheXOdfFkUgTAyNwcMHD" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-chat"><i></i><i></i></span></span><span class="name">Intercambio estudiantil</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1IW94TcGRmMEqFPl_enO2aQy1aWO7xwEr" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-plane"><i></i><i></i></span></span><span class="name">Mochilero por Sudamérica</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1xRxUWHWQ8-4F0KMHgJQhRJpQBQVcWoNR" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-target"><b></b></span></span><span class="name">Enigma</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1Xg978t5uvKfreaSaXdc6usJNnVQs4rMM" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-grid"><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i></span></span><span class="name">Cruzadinha — viajes</span><span class="go">Abrir →</span></a>
+        <a class="new" href="https://drive.google.com/drive/folders/1oAgPI0zK2quZemswVkqsWgpf3T9pGL0v" target="_blank" rel="noopener"><span class="badge">NOVO</span><span class="thumb-sm"><span class="mini t-target"><b></b></span></span><span class="name">Preguntas sobre viaje</span><span class="go">Abrir →</span></a>
       </div>
     </section>
 
