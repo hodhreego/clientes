@@ -7,53 +7,68 @@
 <style>
 :root{
   --bg:#faf8f4; --surface:#ffffff; --border:#dcd3c4; --ink:#241f18; --muted:#6b6154; --accent:#9a4b2f;
+  --thumb1:#e8dcc8; --thumb2:#d9c9a8;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark){
-  :root{ --bg:#1c1712; --surface:#28221b; --border:#3c3327; --ink:#f1ebe0; --muted:#a99d8b; --accent:#e08a63; color-scheme:dark; }
+  :root{ --bg:#1c1712; --surface:#28221b; --border:#3c3327; --ink:#f1ebe0; --muted:#a99d8b; --accent:#e08a63; --thumb1:#3a3123; --thumb2:#4a3d2a; color-scheme:dark; }
 }
 *{box-sizing:border-box}
 body{
-  background:var(--bg); color:var(--ink); margin:0; padding:40px 20px;
+  background:var(--bg); color:var(--ink); margin:0; padding:32px 16px;
   font-family:"Source Serif 4",Georgia,serif;
 }
-.wrap{max-width:520px; margin:0 auto;}
+.wrap{max-width:460px; margin:0 auto;}
 h1{
-  font-family:"Fraunces",Georgia,serif; font-weight:600; font-size:1.6rem; letter-spacing:-.01em;
-  margin:0 0 6px; text-wrap:balance;
+  font-family:"Fraunces",Georgia,serif; font-weight:600; font-size:1.5rem; letter-spacing:-.01em;
+  margin:0 0 4px; text-wrap:balance;
 }
 p.sub{
-  color:var(--muted); font-family:Arial,Helvetica,sans-serif; font-size:.85rem; margin:0 0 24px;
+  color:var(--muted); font-family:Arial,Helvetica,sans-serif; font-size:.82rem; margin:0 0 20px;
 }
-a.main{
-  display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--border);
-  border-radius:10px; padding:14px 16px; text-decoration:none; color:var(--ink);
-  font-family:Arial,Helvetica,sans-serif; font-weight:700; font-size:.95rem; margin-bottom:14px;
+
+.tree{ border:1px solid var(--border); border-radius:12px; background:var(--surface); overflow:hidden; }
+
+/* root node */
+.root > summary{
+  list-style:none; display:flex; align-items:center; gap:10px; padding:14px 16px; cursor:pointer;
+  font-family:Arial,Helvetica,sans-serif; font-weight:700; font-size:.95rem; color:var(--ink);
+  border-bottom:1px solid var(--border); -webkit-tap-highlight-color:transparent;
 }
-a.main .ic{font-size:1.1rem; width:1.4em; text-align:center; flex-shrink:0;}
-a.main .name{flex:1; min-width:0;}
-a.main .go{color:var(--accent); font-size:.85rem; flex-shrink:0;}
-details{
-  background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+.root::-webkit-details-marker,.node::-webkit-details-marker{display:none}
+.root > summary .chev{ color:var(--muted); font-size:.75rem; transition:transform .15s ease; margin-left:auto; flex-shrink:0; }
+.root[open] > summary .chev{ transform:rotate(90deg); }
+.root > summary .thumb{ font-size:1.15rem; }
+
+.branch{ padding:6px; display:flex; flex-direction:column; gap:2px; }
+
+/* each category = one collapsible leaf node with tree connector */
+.node{ position:relative; }
+.node > summary{
+  list-style:none; display:flex; align-items:center; gap:10px; padding:9px 10px 9px 6px; cursor:pointer;
+  border-radius:8px; -webkit-tap-highlight-color:transparent;
 }
-details + details{margin-top:10px;}
-summary{
-  list-style:none; display:flex; align-items:center; gap:12px; padding:14px 16px; cursor:pointer;
-  font-family:Arial,Helvetica,sans-serif; font-weight:600; font-size:.95rem; color:var(--ink);
-  -webkit-tap-highlight-color:transparent;
+.node > summary:hover{ background:color-mix(in srgb, var(--border) 35%, transparent); }
+.node::-webkit-details-marker{display:none}
+
+.twig{ width:16px; height:1px; background:var(--border); flex-shrink:0; margin-left:6px; }
+
+.thumb{
+  width:34px; height:34px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  font-size:1.05rem; background:linear-gradient(155deg,var(--thumb1),var(--thumb2)); border:1px solid var(--border);
 }
-summary::-webkit-details-marker{display:none}
-summary .ic{font-size:1.1rem; width:1.4em; text-align:center; flex-shrink:0;}
-summary .name{flex:1; min-width:0;}
-summary .chev{color:var(--muted); font-size:.8rem; transition:transform .15s ease; flex-shrink:0;}
-details[open] summary .chev{transform:rotate(90deg);}
-.panel{padding:0 16px 16px; margin-top:-2px;}
-.panel a{
+.label{ flex:1; min-width:0; font-family:Arial,Helvetica,sans-serif; font-weight:600; font-size:.9rem; color:var(--ink); }
+.node .chev{ color:var(--muted); font-size:.7rem; transition:transform .15s ease; flex-shrink:0; }
+.node[open] .chev{ transform:rotate(90deg); }
+
+.leaf-body{ padding:2px 10px 10px 56px; }
+.leaf-body a{
   display:inline-flex; align-items:center; gap:6px; color:var(--accent); text-decoration:none;
-  font-family:Arial,Helvetica,sans-serif; font-weight:600; font-size:.88rem;
-  border:1px solid var(--border); border-radius:8px; padding:8px 12px;
+  font-family:Arial,Helvetica,sans-serif; font-weight:600; font-size:.82rem;
+  border:1px solid var(--border); border-radius:7px; padding:6px 10px;
 }
-footer{margin-top:24px; color:var(--muted); font-family:Arial,Helvetica,sans-serif; font-size:.78rem;}
+
+footer{ margin-top:18px; color:var(--muted); font-family:Arial,Helvetica,sans-serif; font-size:.76rem; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
@@ -61,48 +76,55 @@ footer{margin-top:24px; color:var(--muted); font-family:Arial,Helvetica,sans-ser
 <body>
 <div class="wrap">
   <h1>Atividades de Espanhol</h1>
-  <p class="sub">Pastas do Google Drive — Atividades gerais, mês 2026-09. Toque em cada categoria para expandir.</p>
+  <p class="sub">Toque para expandir cada categoria e abrir a pasta no Drive.</p>
 
-  <a class="main" href="https://drive.google.com/drive/folders/18CQcOGwkJIbj1PfW87f3Nnal-DrMRUKQ" target="_blank" rel="noopener">
-    <span class="ic">📂</span><span class="name">Atividades gerais (pasta principal)</span><span class="go">Abrir →</span>
-  </a>
+  <details class="tree root" open>
+    <summary>
+      <span class="thumb">📂</span>
+      <span class="label" style="flex:1">Atividades gerais</span>
+      <span class="chev">▶</span>
+    </summary>
+    <div class="branch">
 
-  <details>
-    <summary><span class="ic">🧒</span><span class="name">Infantil</span><span class="chev">▶</span></summary>
-    <div class="panel"><a href="https://drive.google.com/drive/folders/1x35f6yg-zkQNrIud2eXNvCzeLFRvfmdD" target="_blank" rel="noopener">Abrir pasta no Drive →</a></div>
+      <details class="node">
+        <summary><span class="twig"></span><span class="thumb">🧒</span><span class="label">Infantil</span><span class="chev">▶</span></summary>
+        <div class="leaf-body"><a href="https://drive.google.com/drive/folders/1x35f6yg-zkQNrIud2eXNvCzeLFRvfmdD" target="_blank" rel="noopener">Abrir no Drive →</a></div>
+      </details>
+
+      <details class="node">
+        <summary><span class="twig"></span><span class="thumb">💼</span><span class="label">Vocabulário — Negócios</span><span class="chev">▶</span></summary>
+        <div class="leaf-body"><a href="https://drive.google.com/drive/folders/1bhlNGR-0uJ5XFgSlGtTMampkjn4otUwY" target="_blank" rel="noopener">Abrir no Drive →</a></div>
+      </details>
+
+      <details class="node">
+        <summary><span class="twig"></span><span class="thumb">🗂️</span><span class="label">Vocabulário — Geral</span><span class="chev">▶</span></summary>
+        <div class="leaf-body"><a href="https://drive.google.com/drive/folders/1lF6g5mcQaUoUBrKPHCCkcZMgJ7RT67YX" target="_blank" rel="noopener">Abrir no Drive →</a></div>
+      </details>
+
+      <details class="node">
+        <summary><span class="twig"></span><span class="thumb">📝</span><span class="label">Gramática — Geral</span><span class="chev">▶</span></summary>
+        <div class="leaf-body"><a href="https://drive.google.com/drive/folders/19yp7Qq-asxJg550KaY_yfdZbMtHH-0x3" target="_blank" rel="noopener">Abrir no Drive →</a></div>
+      </details>
+
+      <details class="node">
+        <summary><span class="twig"></span><span class="thumb">📖</span><span class="label">Interpretação de textos</span><span class="chev">▶</span></summary>
+        <div class="leaf-body"><a href="https://drive.google.com/drive/folders/1Ezh37Qmm0HO-RFxV6Qy4giQi_cptV-ou" target="_blank" rel="noopener">Abrir no Drive →</a></div>
+      </details>
+
+      <details class="node">
+        <summary><span class="twig"></span><span class="thumb">✈️</span><span class="label">Viagem</span><span class="chev">▶</span></summary>
+        <div class="leaf-body"><a href="https://drive.google.com/drive/folders/1-DLsCX3ayD6crqgisMBZJq448Jqgf96i" target="_blank" rel="noopener">Abrir no Drive →</a></div>
+      </details>
+
+      <details class="node">
+        <summary><span class="twig"></span><span class="thumb">🗃️</span><span class="label">Outros</span><span class="chev">▶</span></summary>
+        <div class="leaf-body"><a href="https://drive.google.com/drive/folders/1pMNb3psMYUUB6d89gWDqA491ySUhjNmG" target="_blank" rel="noopener">Abrir no Drive →</a></div>
+      </details>
+
+    </div>
   </details>
 
-  <details>
-    <summary><span class="ic">💼</span><span class="name">Vocabulário — Negócios</span><span class="chev">▶</span></summary>
-    <div class="panel"><a href="https://drive.google.com/drive/folders/1bhlNGR-0uJ5XFgSlGtTMampkjn4otUwY" target="_blank" rel="noopener">Abrir pasta no Drive →</a></div>
-  </details>
-
-  <details>
-    <summary><span class="ic">🗂️</span><span class="name">Vocabulário — Geral</span><span class="chev">▶</span></summary>
-    <div class="panel"><a href="https://drive.google.com/drive/folders/1lF6g5mcQaUoUBrKPHCCkcZMgJ7RT67YX" target="_blank" rel="noopener">Abrir pasta no Drive →</a></div>
-  </details>
-
-  <details>
-    <summary><span class="ic">📝</span><span class="name">Gramática — Geral</span><span class="chev">▶</span></summary>
-    <div class="panel"><a href="https://drive.google.com/drive/folders/19yp7Qq-asxJg550KaY_yfdZbMtHH-0x3" target="_blank" rel="noopener">Abrir pasta no Drive →</a></div>
-  </details>
-
-  <details>
-    <summary><span class="ic">📖</span><span class="name">Interpretação de textos</span><span class="chev">▶</span></summary>
-    <div class="panel"><a href="https://drive.google.com/drive/folders/1Ezh37Qmm0HO-RFxV6Qy4giQi_cptV-ou" target="_blank" rel="noopener">Abrir pasta no Drive →</a></div>
-  </details>
-
-  <details>
-    <summary><span class="ic">✈️</span><span class="name">Viagem</span><span class="chev">▶</span></summary>
-    <div class="panel"><a href="https://drive.google.com/drive/folders/1-DLsCX3ayD6crqgisMBZJq448Jqgf96i" target="_blank" rel="noopener">Abrir pasta no Drive →</a></div>
-  </details>
-
-  <details>
-    <summary><span class="ic">🗃️</span><span class="name">Outros</span><span class="chev">▶</span></summary>
-    <div class="panel"><a href="https://drive.google.com/drive/folders/1pMNb3psMYUUB6d89gWDqA491ySUhjNmG" target="_blank" rel="noopener">Abrir pasta no Drive →</a></div>
-  </details>
-
-  <footer>Toque no nome da categoria para expandir ou recolher, e no botão para abrir a pasta no Drive.</footer>
+  <footer>Toque no nome de cada pasta para expandir/recolher, e no botão para abrir no Drive.</footer>
 </div>
 </body>
 </html>
