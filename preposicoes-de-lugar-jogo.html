@@ -184,6 +184,7 @@ div.ch.drag u{display:inline-block;width:6.5mm;height:6.5mm;line-height:6.5mm;te
 .jres.ok,.jres.no{font-size:0;text-shadow:none}.jres svg{width:55%;height:55%;max-height:60mm;filter:drop-shadow(0 0 8px rgba(255,255,255,.9))}
 .jc.ok::after{content:'';width:6.5mm;height:6.5mm;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3.5 12.8l5.6 5.6L20.5 6.2' fill='none' stroke='%2316a34a' stroke-width='4.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;font-size:0;left:1.5mm;bottom:6mm}
 .vk{color:#16a34a;font-weight:900;font-family:'Segoe UI Symbol','DejaVu Sans',sans-serif}.vx{color:#dc2626;font-weight:900;font-family:'Segoe UI Symbol','DejaVu Sans',sans-serif}
+.jbank div.ch.pend{opacity:.4;border-style:dashed;pointer-events:none}.jc.pend{box-shadow:0 0 0 3px #fff,0 0 12px 5px #00f0ff;outline:3px solid #00f0ff;outline-offset:-3px}
 </style><style id="tela16x9">
 @media screen{
  html,body{background:#fff}
@@ -378,20 +379,20 @@ document.getElementById("abrir").onclick=()=>document.getElementById("painel").c
     if(+ch.dataset.n===n){alvo.classList.add('ok');alvo.querySelector('.jr').innerHTML='<b>'+ch.dataset.l+'</b>';
       alvo.insertAdjacentHTML('beforeend','<div class="jp">'+pick[n]+'</div>');ch.classList.add('off');acertos++;pontos+=15;fim()}
     else{pontos-=10;erros++;fim();alvo.classList.remove('err');void alvo.offsetWidth;alvo.classList.add('err')}}
-  function contar(ch,cd){ocupado=1;let t=10;cd.classList.add('alvo');ch.classList.add('sel');
+  function contar(ch,cd){if(cd.classList.contains('pend')||ch.classList.contains('pend')||cd.classList.contains('ok'))return;
+    const g=window._jg;let t=10;cd.classList.add('pend');ch.classList.add('pend');ch.classList.remove('sel');if(sel===ch)sel=null;cd.classList.remove('alvo');
     const cdn=document.createElement('div');cdn.className='jcd';cdn.textContent=t;cd.appendChild(cdn);
-    const iv=setInterval(()=>{t--;if(t>0){cdn.textContent=t;return}clearInterval(iv);cdn.remove();cd.classList.remove('alvo');
-      ch.classList.remove('sel');sel=null;ocupado=0;colocar(ch,cd)},1000)}
-  function selecionar(ch){if(ocupado)return;chips.forEach(c=>c.classList.remove('sel'));if(sel===ch){sel=null;return}sel=ch;ch.classList.add('sel')}
-  function montar(r){rodada=r;prep(r);sel=null;ocupado=0;acertos=0;
+    const iv=setInterval(()=>{if(g!==window._jg){clearInterval(iv);return}t--;if(t>0){cdn.textContent=t;return}clearInterval(iv);cdn.remove();cd.classList.remove('pend');ch.classList.remove('pend');colocar(ch,cd)},1000)}
+  function selecionar(ch){if(ch.classList.contains('pend')||ch.classList.contains('off'))return;chips.forEach(c=>c.classList.remove('sel'));if(sel===ch){sel=null;return}sel=ch;ch.classList.add('sel')}
+  function montar(r){window._jg=(window._jg||0)+1;rodada=r;prep(r);sel=null;ocupado=0;acertos=0;
     jgrid.innerHTML=fig(0);jbank.innerHTML=bank(0);cards=[...jgrid.children];chips=[...jbank.children];
     chips.forEach((c,k)=>{c.classList.add('ch');c.dataset.n=o[k];c.dataset.l=L[k]});
     cards.forEach(cd=>{
-      cd.addEventListener('mouseenter',()=>{if(sel&&!ocupado)cd.classList.add('alvo')});
-      cd.addEventListener('mouseleave',()=>{if(!ocupado)cd.classList.remove('alvo')});
-      cd.addEventListener('click',()=>{if(!sel||ocupado||cd.classList.contains('ok'))return;contar(sel,cd)})});
+      cd.addEventListener('mouseenter',()=>{if(sel&&!cd.classList.contains('pend'))cd.classList.add('alvo')});
+      cd.addEventListener('mouseleave',()=>{cd.classList.remove('alvo')});
+      cd.addEventListener('click',()=>{if(!sel||cd.classList.contains('ok')||cd.classList.contains('pend'))return;contar(sel,cd)})});
     chips.forEach(ch=>ch.addEventListener('pointerdown',e=>{
-      if(ch.classList.contains('off'))return;e.preventDefault();
+      if(ch.classList.contains('off')||ch.classList.contains('pend'))return;e.preventDefault();
       const r=ch.getBoundingClientRect(),dx=e.clientX-r.left,dy=e.clientY-r.top,w=r.width;
       const g=ch.cloneNode(true);g.classList.add('drag');g.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+w+'px';document.body.appendChild(g);
       let alvo=null,mov=0;
@@ -399,8 +400,7 @@ document.getElementById("abrir").onclick=()=>document.getElementById("painel").c
         const el=document.elementFromPoint(ev.clientX,ev.clientY),cd=el&&el.closest('.jc');
         if(alvo&&alvo!==cd)alvo.classList.remove('alvo');alvo=cd||null;if(alvo)alvo.classList.add('alvo')};
       const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);
-        g.remove();if(!mov){selecionar(ch);return}if(!alvo)return;alvo.classList.remove('alvo');if(alvo.classList.contains('ok'))return;
-        if(ocupado)return;contar(ch,alvo)};
+        g.remove();if(!mov){selecionar(ch);return}if(!alvo)return;alvo.classList.remove('alvo');if(alvo.classList.contains('ok')||alvo.classList.contains('pend'))return;contar(ch,alvo)};
       addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up);mv(e)}));
     fim()}
   window.jogoProxima=function(){if(rodada<NR-1)montar(rodada+1)};
