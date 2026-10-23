@@ -477,7 +477,7 @@ document.getElementById('abrir').onclick=()=>document.getElementById('painel').c
     if(+ch.dataset.n===n){alvo.classList.add('ok');alvo.querySelector('.jr').innerHTML='<b>'+ch.dataset.l+'</b>';
       alvo.insertAdjacentHTML('beforeend','<div class="jp">'+pick[n]+'</div>');ch.classList.add('off');acertos++;pontos+=15;fim()}
     else{pontos-=10;erros++;fim();alvo.classList.remove('err');void alvo.offsetWidth;alvo.classList.add('err')}}
-  function contar(ch,cd){ocupado=1;let t=5;cd.classList.add('alvo');ch.classList.add('sel');
+  function contar(ch,cd){ocupado=1;let t=10;cd.classList.add('alvo');ch.classList.add('sel');
     const cdn=document.createElement('div');cdn.className='jcd';cdn.textContent=t;cd.appendChild(cdn);
     const iv=setInterval(()=>{t--;if(t>0){cdn.textContent=t;return}clearInterval(iv);cdn.remove();cd.classList.remove('alvo');
       ch.classList.remove('sel');sel=null;ocupado=0;colocar(ch,cd)},1000)}
