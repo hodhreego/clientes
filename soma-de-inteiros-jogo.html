@@ -181,6 +181,9 @@ div.ch.drag u{display:inline-block;width:6.5mm;height:6.5mm;line-height:6.5mm;te
 .jnext{font:800 11pt sans-serif;background:#1d8a5a;color:#fff;border:0;border-radius:99px;padding:1mm 4mm;cursor:pointer;margin-left:2mm;animation:jblink .8s steps(1) infinite}
 @media print{.jnext{display:none}}
 .jc svg{flex:1;min-height:0;width:100%;display:block}
+.jres.ok,.jres.no{font-size:0;text-shadow:none}.jres svg{width:55%;height:55%;max-height:60mm;filter:drop-shadow(0 0 8px rgba(255,255,255,.9))}
+.jc.ok::after{content:'';width:6.5mm;height:6.5mm;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3.5 12.8l5.6 5.6L20.5 6.2' fill='none' stroke='%2316a34a' stroke-width='4.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;font-size:0;left:1.5mm;bottom:6mm}
+.vk{color:#16a34a;font-weight:900;font-family:'Segoe UI Symbol','DejaVu Sans',sans-serif}.vx{color:#dc2626;font-weight:900;font-family:'Segoe UI Symbol','DejaVu Sans',sans-serif}
 </style><style>:root{--jgf:16pt}</style></head>
 <body>
 <div class="painel" id="painel"><button type="button" id="abrir">⚙ Ajustes</button><div class="corpo" id="corpo"></div></div>
@@ -213,11 +216,11 @@ document.getElementById("abrir").onclick=()=>document.getElementById("painel").c
   let acertos=0,pontos=0,erros=0,ant=0,sel=null,ocupado=0;
   const coin=document.createElement('div');coin.className='jcoin';fol.appendChild(coin);
   function fim(){const done=acertos===N&&N>0;
-    msg.innerHTML=(NR>1?'Fase '+(rodada+1)+'/'+NR+' · ':'')+acertos+' / '+N+' · ✔ +15 · ✘ −10 '+(done?(rodada<NR-1?'<button type="button" class="jnext" onclick="jogoProxima()">Próxima fase ▶</button>':'🎉 Parabéns! Você terminou todas as fases!'):'');
+    msg.innerHTML=(NR>1?'Fase '+(rodada+1)+'/'+NR+' · ':'')+acertos+' / '+N+' · <span class="vk">✓</span> +15 · <span class="vx">✗</span> −10 '+(done?(rodada<NR-1?'<button type="button" class="jnext" onclick="jogoProxima()">Próxima fase ▶</button>':'🎉 Parabéns! Você terminou todas as fases!'):'');
     coin.innerHTML='<i>$</i>'+pontos+' pontos';
     if(pontos!==ant){const d=pontos-ant;coin.classList.remove('up','down');void coin.offsetWidth;coin.classList.add(d>0?'up':'down');
       const f=document.createElement('div');f.className='jfly';f.style.color=d>0?'#1d8a5a':'#c0392b';f.textContent=(d>0?'+':'−')+Math.abs(d)+' 🪙';fol.appendChild(f);setTimeout(()=>f.remove(),1100);ant=pontos}}
-  function colocar(ch,alvo){const n=cards.indexOf(alvo);const rs=document.createElement('div');rs.className='jres '+(+ch.dataset.n===n?'ok':'no');rs.textContent=+ch.dataset.n===n?'✔':'✘';alvo.appendChild(rs);setTimeout(()=>rs.remove(),1400);
+  function colocar(ch,alvo){const n=cards.indexOf(alvo);const rs=document.createElement('div');rs.className='jres '+(+ch.dataset.n===n?'ok':'no');rs.innerHTML=+ch.dataset.n===n?"<svg viewBox='0 0 24 24' width='100%' height='100%'><path d='M3.5 12.8l5.6 5.6L20.5 6.2' fill='none' stroke='#16a34a' stroke-width='4.2' stroke-linecap='round' stroke-linejoin='round'/></svg>":"<svg viewBox='0 0 24 24' width='100%' height='100%'><path d='M5 5l14 14M19 5L5 19' fill='none' stroke='#dc2626' stroke-width='4.2' stroke-linecap='round'/></svg>";alvo.appendChild(rs);setTimeout(()=>rs.remove(),1400);
     if(+ch.dataset.n===n){alvo.classList.add('ok');alvo.querySelector('.jr').innerHTML='<b>'+ch.dataset.l+'</b>';
       alvo.insertAdjacentHTML('beforeend','<div class="jp">'+pick[n]+'</div>');ch.classList.add('off');acertos++;pontos+=15;fim()}
     else{pontos-=10;erros++;fim();alvo.classList.remove('err');void alvo.offsetWidth;alvo.classList.add('err')}}
