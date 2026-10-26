@@ -60,6 +60,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#eef3fb;font-family:"S
 @keyframes fly{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-9vh)}}
 #cfg{position:fixed;right:1vw;top:8.5vh;z-index:1500;background:#fff;border:.25vh solid #1f3a8a;border-radius:1.2vh;padding:1.2vh 1.2vw;font-size:1.9vh;display:none;width:22vw;box-shadow:0 1vh 3vh #0005}
 #cfg.on{display:block}#cfg label{display:block;margin:.8vh 0 .2vh;font-weight:700}#cfg input[type=range]{width:100%}
+.prods.many .prod{min-width:12.5vw;padding:.7vh .7vw}.prods.many .e{font-size:8.2vh}.prods.many .n{font-size:2vh}.prods.many .tag{font-size:3.6vh}.prods.many{gap:.9vh .7vw}
 </style>
 </head>
 <body>
@@ -82,7 +83,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#eef3fb;font-family:"S
   <div class="row"><span class="lbl">Cédulas</span><span id="rowC" class="row" style="gap:1.1vw"></span></div>
  </div>
 </div>
-<div id="cfg"><b>Ajustes</b><label>Tamanho do dinheiro</label><input type="range" id="sz" min="5" max="12" step="0.2" value="8.4"><label>Tamanho das figuras e texto da loja</label><input type="range" id="zm" min="70" max="140" step="2" value="100"><label style="display:flex;gap:1vw;align-items:center"><input type="checkbox" id="ck"> Mostrar a soma enquanto monta</label></div>
+<div id="cfg"><b>Ajustes</b><label>Tamanho do dinheiro</label><input type="range" id="sz" min="5" max="12" step="0.2" value="8.4"><label>Tamanho das figuras e texto da loja</label><input type="range" id="zm" min="70" max="140" step="2" value="100"><label style="display:flex;gap:1vw;align-items:center"><input type="checkbox" id="snd" checked> Som ligado</label><label style="display:flex;gap:1vw;align-items:center"><input type="checkbox" id="ck"> Mostrar a soma enquanto monta</label></div>
 <div class="fim" id="fim"><div class="box"><h2 id="fT"></h2><p id="fP"></p><button class="btn ok" id="fB"></button></div></div>
 <script>
 (function(){
@@ -93,7 +94,7 @@ const BS={200:['#8d9bb0','#dfe6f0'],500:['#8e5bb8','#efe2fa'],1000:['#d9534f','#
 function fmt(c){return 'R$ '+Math.floor(c/100)+','+String(c%100).padStart(2,'0')}
 function coinSvg(v){const s=CS[v];return `<svg viewBox="0 0 100 100" style="--k:${s.d}"><circle cx="50" cy="50" r="48" fill="${s.o}" stroke="#0003" stroke-width="2"/><circle cx="50" cy="50" r="38" fill="${s.i}" stroke="#0002" stroke-width="1.5"/><text x="50" y="${s.l?56:60}" text-anchor="middle" font-size="${s.t.length>1?34:44}" font-weight="900" fill="#3b2a12" font-family="Arial">${s.t}</text><text x="50" y="76" text-anchor="middle" font-size="12" font-weight="800" fill="#3b2a12" font-family="Arial">${s.l}</text></svg>`}
 function billSvg(v){const [a,b]=BS[v];const n=v/100;return `<svg viewBox="0 0 170 84"><rect x="1" y="1" width="168" height="82" rx="8" fill="${a}" stroke="#0004" stroke-width="2"/><rect x="7" y="7" width="156" height="70" rx="5" fill="${b}" stroke="#fff" stroke-width="2"/><circle cx="30" cy="42" r="15" fill="${a}" opacity=".35"/><circle cx="140" cy="42" r="15" fill="${a}" opacity=".35"/><text x="85" y="55" text-anchor="middle" font-size="${n>=100?40:46}" font-weight="900" fill="${a}" font-family="Arial" stroke="#fff" stroke-width="1">${n}</text><text x="14" y="22" font-size="11" font-weight="800" fill="${a}" font-family="Arial">R$</text><text x="85" y="72" text-anchor="middle" font-size="10" font-weight="800" fill="${a}" font-family="Arial">REAIS</text></svg>`}
-function mny(v,mini){const e=document.createElement('div');e.className='m';e.dataset.v=v;const b=v>=200&&BS[v];
+function mny(v,mini){const e=document.createElement('div');e.className='m';e.dataset.v=v;const b=!!BS[v];
  const k=b?1:CS[v].d;e.style.setProperty('--h',(b?'calc(var(--u)*0.95)':`calc(var(--u)*${(k*0.95).toFixed(2)})`));
  if(mini)e.style.setProperty('--h',b?'calc(var(--u)*.95)':`calc(var(--u)*${(k*.95).toFixed(2)})`);
  e.innerHTML=b?billSvg(v):coinSvg(v);return e}
@@ -113,6 +114,16 @@ const FASES=[
  {t:'Troco com cédulas',s:'Fase 5 — troco com cédulas e moedas',i:'<b>Calcule e entregue o troco</b> usando cédulas e moedas. <i>Troco = pagou − preço.</i>',gen:()=>mk(0,()=>{const p=rnd(12,89)*100+pick([0,25,50,75,5,15,35,45,95]);const bs=[2000,5000,10000].filter(b=>b>p);return pay([p],pick(bs))})},
  {t:'Compras e troco',s:'Fase 6 — some os produtos e dê o troco',i:'<b>Some os produtos</b>, veja com que cédula o cliente pagou e <b>entregue o troco</b>.',gen:()=>mk(0,()=>{let a,b;do{a=q25(200,2500);b=q25(200,2500)}while(a+b<800||a+b>4500);const t=a+b;const bs=[2000,5000,10000].filter(x=>x>t);return pay([a,b],pick(bs))})}
 ];
+/* ---------- sons ---------- */
+let AC=null,mute=false;
+function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,t0,d,type,v){const a=ac();if(!a||mute)return;const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+t0;o.type=type||'sine';o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(v||.12,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.03)}
+function noise(t0,d,v,fq){const a=ac();if(!a||mute)return;const n=Math.floor(a.sampleRate*d),b=a.createBuffer(1,n,a.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(Math.random()*2-1)*(1-i/n);const s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=b;f.type='bandpass';f.frequency.value=fq||3000;g.gain.value=v||.12;s.connect(f);f.connect(g);g.connect(a.destination);s.start(a.currentTime+t0)}
+function clink(v){if(v>=100&&window.BILLSET&&window.BILLSET.has(v)){noise(0,.12,.10,1800);return}const f=2400+Math.random()*900;tone(f,0,.09,'triangle',.10);tone(f*1.5,.02,.07,'sine',.05)}
+function bip(i){tone(1500+(i%3)*120,0,.08,'square',.07)}
+function kaching(){noise(0,.18,.14,900);tone(1568,.1,.5,'sine',.13);tone(2093,.2,.7,'sine',.11);tone(3136,.28,.5,'sine',.05)}
+function buzz(){tone(150,0,.32,'sawtooth',.10);tone(110,.05,.3,'square',.05)}
+window.BILLSET=new Set(BILLS);
 /* ---------- estado ---------- */
 const $=id=>document.getElementById(id);
 let fi=0,ti=0,pts=0,tasks=[],zone=[],showSum=false,tries=0,lock=false;
@@ -125,7 +136,7 @@ function renderZone(){zoneEl.innerHTML='';if(!zone.length){zoneEl.innerHTML='<di
  const s=$('soma');if(showSum){s.className='soma';s.textContent='soma: '+fmt(sum())}else{s.className='soma hide';s.textContent='soma escondida'}}
 function task(){lock=false;const t=tasks[ti];zone=[];tries=0;$('msg').textContent='';$('msg').className='msg';$('res1').className='res';$('res2').className='res';
  $('zt').textContent=t.paid?'👛 Troco a entregar':'👛 Sua carteira';
- $('prods').innerHTML=t.items.map(i=>`<div class="prod"><div class="e">${i.e}</div><div class="n">${i.n}</div><div class="tag">${fmt(i.p)}</div></div>`).join('');
+ $('prods').className='prods'+(t.items.length>2?' many':'');$('prods').innerHTML=t.items.map(i=>`<div class="prod"><div class="e">${i.e}</div><div class="n">${i.n}</div><div class="tag">${fmt(i.p)}</div></div>`).join('');
  const x=$('extra');x.innerHTML='';
  if(t.paid){const pd=document.createElement('div');pd.className='paid';pd.innerHTML='O cliente pagou com:';const b=mny(t.paid);b.style.setProperty('--h','calc(var(--u)*1.1)');b.style.pointerEvents='none';pd.appendChild(b);x.appendChild(pd);x.insertAdjacentHTML('beforeend','<div class="alvo"><small>Quanto é o troco?</small></div>')}
  else if(t.items.length>1)x.innerHTML='<div class="alvo"><small>Some os dois preços e pague o total</small></div>';
@@ -134,9 +145,9 @@ function task(){lock=false;const t=tasks[ti];zone=[];tries=0;$('msg').textConten
 function fase(){tasks=FASES[fi].gen();ti=0;$('inst').innerHTML=FASES[fi].i;task()}
 function conferir(){if(lock||!zone.length){if(!zone.length){$('msg').textContent='Coloque dinheiro na carteira primeiro.';$('msg').className='msg bad'}return}
  const t=tasks[ti],s=sum();tries++;const r=$('res2'),r1=$('res1');
- if(s===t.target){lock=true;setPts(15);r.textContent=r1.textContent='✔';r.className=r1.className='res on ok';$('msg').textContent='Muito bem! '+fmt(t.target)+(t.paid?' de troco.':' certinho.');$('msg').className='msg good';
+ if(s===t.target){lock=true;setPts(15);kaching();r.textContent=r1.textContent='✔';r.className=r1.className='res on ok';$('msg').textContent='Muito bem! '+fmt(t.target)+(t.paid?' de troco.':' certinho.');$('msg').className='msg good';
   setTimeout(()=>{ti++;if(ti>=tasks.length)fimFase();else task()},1500)}
- else{setPts(-10);r.textContent='✘';r.className='res on bad';zoneEl.classList.add('shake');setTimeout(()=>{r.className='res';zoneEl.classList.remove('shake')},900);
+ else{setPts(-10);buzz();r.textContent='✘';r.className='res on bad';zoneEl.classList.add('shake');setTimeout(()=>{r.className='res';zoneEl.classList.remove('shake')},900);
   $('msg').textContent=s<t.target?'Ainda falta dinheiro. Confira a conta!':'Passou do valor. Tire alguma coisa!';$('msg').className='msg bad'}}
 function fimFase(){const f=$('fim');$('fT').textContent=fi<FASES.length-1?'Fase '+(fi+1)+' concluída! 🎉':'Parabéns! Terminou todas as fases! 🏆';$('fP').textContent='Você tem '+pts+' pontos.';
  $('fB').textContent=fi<FASES.length-1?'Próxima fase ▶':'Jogar de novo ↺';f.classList.add('on');$('fB').onclick=()=>{f.classList.remove('on');if(fi<FASES.length-1)fi++;else{fi=0;pts=0;setPts(0)}fase()}}
@@ -148,14 +159,15 @@ function tray(v){const e=mny(v);let st=null,clone=null;
   if(!st.moved&&Math.hypot(dx,dy)>6){st.moved=1;clone=e.cloneNode(true);clone.classList.add('drag');document.body.appendChild(clone)}
   if(clone){clone.style.left=ev.clientX+'px';clone.style.top=ev.clientY+'px';const r=zoneEl.getBoundingClientRect();zoneEl.classList.toggle('over',ev.clientX>r.left&&ev.clientX<r.right&&ev.clientY>r.top&&ev.clientY<r.bottom)}});
  const end=ev=>{if(!st)return;const r=zoneEl.getBoundingClientRect();const inside=ev.clientX>r.left&&ev.clientX<r.right&&ev.clientY>r.top&&ev.clientY<r.bottom;
-  if(clone){clone.remove();clone=null;zoneEl.classList.remove('over');if(inside){zone.push(v);renderZone()}}
-  else{zone.push(v);renderZone()}st=null};
+  if(clone){clone.remove();clone=null;zoneEl.classList.remove('over');if(inside){zone.push(v);clink(v);renderZone()}}
+  else{zone.push(v);clink(v);renderZone()}st=null};
  e.addEventListener('pointerup',end);e.addEventListener('pointercancel',()=>{if(clone){clone.remove();clone=null}zoneEl.classList.remove('over');st=null});
  return e}
 /* ---------- ajustes ---------- */
 $('bOk').onclick=conferir;$('bLimpar').onclick=()=>{if(lock)return;zone=[];renderZone();$('msg').textContent=''};
 $('bSoma').onclick=()=>{showSum=!showSum;$('ck').checked=showSum;$('bSoma').textContent=showSum?'🙈 Esconder soma':'👁 Ver soma';renderZone()};
 $('ck').onchange=()=>{showSum=$('ck').checked;$('bSoma').textContent=showSum?'🙈 Esconder soma':'👁 Ver soma';renderZone()};
+$('snd').onchange=()=>{mute=!$('snd').checked;if(!mute){ac();kaching()}};
 $('bCfg').onclick=()=>$('cfg').classList.toggle('on');
 $('sz').oninput=()=>document.documentElement.style.setProperty('--u',$('sz').value+'vh');
 $('zm').oninput=()=>document.documentElement.style.setProperty('--zm',$('zm').value/100);
