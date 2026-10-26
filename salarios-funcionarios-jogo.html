@@ -121,6 +121,43 @@ html,body{margin:0;height:100%;overflow:hidden;background:#eef3fb;font-family:"S
 </div>
 <div id="cfg"><b>Ajustes</b><label>Tamanho do dinheiro</label><input type="range" id="sz" min="5" max="12" step="0.2" value="8.4"><label>Tamanho das figuras e texto da loja</label><input type="range" id="zm" min="70" max="140" step="2" value="100"><label style="display:flex;gap:1vw;align-items:center"><input type="checkbox" id="snd" checked> Som ligado</label><label style="display:flex;gap:1vw;align-items:center"><input type="checkbox" id="ck"> Mostrar a soma enquanto monta</label></div>
 <div class="fim" id="fim"><div class="box"><h2 id="fT"></h2><p id="fP"></p><button class="btn ok" id="fB"></button></div></div>
+<div id="contrato"><div class="cbox"><div class="cico">👷</div><h2>Contrato de trabalho</h2>
+<p>Você agora é <b>funcionário</b>! Cada pagamento certo rende <b>moedas</b>, e a cada <b>3 acertos seguidos</b> você ganha um <b>bônus</b>. No fim, seu <b>holerite</b> mostra o seu salário.</p>
+<label>Nome completo do funcionário</label><input id="cNome" type="text" maxlength="60" autocomplete="off" placeholder="Nome e sobrenome">
+<label>Turma</label><input id="cTurma" type="text" maxlength="12" autocomplete="off" placeholder="Ex.: 9ºA">
+<p class="aviso">⚠️ Depois de assinar, o nome <b>não pode ser alterado</b>. Digite o seu próprio nome.</p>
+<div id="cErr"></div><button id="cOk" type="button">✍️ Assinar e começar a trabalhar</button></div></div>
+<div id="holerite"><div class="hbox" id="hbox"><div class="hmark" id="hmark"></div>
+<h2>💼 Holerite <small id="hTipo"></small></h2>
+<div class="hnome" id="hNome"></div><div class="hsub" id="hSub"></div>
+<table><tr><td>Acertos (<span id="hA"></span> × 15)</td><td id="hBase"></td></tr><tr><td>🎁 Bônus de sequência</td><td id="hBon"></td></tr><tr><td>Erros (<span id="hE"></span> × −10)</td><td id="hDesc"></td></tr><tr class="tot"><td>🪙 SALÁRIO (moedas)</td><td id="hTot"></td></tr></table>
+<div class="hcod">Código: <b id="hCod"></b> &nbsp;·&nbsp; <span id="hQuando"></span></div>
+<div class="hbt"><button type="button" id="hPrint">🖨️ Imprimir</button><button type="button" id="hFecha">Voltar ao trabalho</button></div></div></div>
+<div id="bonusBanner"></div>
+<style id="folha-css">
+#contrato,#holerite{position:fixed;inset:0;z-index:3000;background:#0b1b44ee;display:none;align-items:center;justify-content:center;padding:16px;overflow:auto}
+#contrato.on,#holerite.on{display:flex}
+.cbox,.hbox{background:#fff;border-radius:18px;max-width:520px;width:100%;padding:22px 24px;box-shadow:0 14px 50px #0008;font-family:'Segoe UI',Arial,sans-serif;color:#16213a;position:relative;overflow:hidden}
+.cico{font-size:54px;text-align:center}.cbox h2{margin:0 0 8px;text-align:center;font-size:26px;color:#1f4fd8}.cbox p{margin:6px 0;font-size:15px}
+.cbox label{display:block;font-weight:800;font-size:13px;margin:12px 0 3px;color:#475569}
+.cbox input{width:100%;font:700 20px 'Segoe UI',Arial;padding:9px 12px;border:2px solid #94a3b8;border-radius:10px}
+.cbox input:focus{outline:0;border-color:#1f4fd8}.aviso{background:#fff4e0;border:1.5px solid #f4b400;border-radius:10px;padding:8px 10px;font-size:14px}
+#cErr{color:#d93025;font-weight:800;min-height:20px;font-size:14px}
+#cOk{width:100%;margin-top:6px;font:900 20px 'Segoe UI',Arial;background:#0f9d58;color:#fff;border:0;border-radius:12px;padding:13px;cursor:pointer}
+.hbox h2{margin:0;font-size:26px;color:#1f4fd8}.hbox h2 small{font-size:13px;color:#64748b;font-weight:700;margin-left:6px}
+.hnome{font:900 30px 'Segoe UI',Arial;margin-top:10px;text-transform:uppercase;line-height:1.1}.hsub{color:#64748b;font-weight:700;margin-bottom:10px}
+.hbox table{width:100%;border-collapse:collapse;font-size:17px;position:relative;z-index:1}
+.hbox td{padding:8px 4px;border-bottom:1.5px dashed #cbd5e1}.hbox td+td{text-align:right;font-weight:900}
+.hbox tr.tot td{font-size:24px;border-bottom:0;border-top:3px solid #16213a;color:#0f7a43}
+.hcod{margin-top:12px;font-size:13px;color:#475569;position:relative;z-index:1}.hcod b{font-family:Consolas,monospace;font-size:15px;color:#16213a}
+.hbt{display:flex;gap:8px;margin-top:14px;position:relative;z-index:1}.hbt button{flex:1;font:800 16px 'Segoe UI',Arial;padding:10px;border-radius:10px;border:2px solid #1f4fd8;background:#fff;color:#1f4fd8;cursor:pointer}
+.hbt button:last-child{background:#1f4fd8;color:#fff}
+.hmark{position:absolute;inset:-40%;transform:rotate(-24deg);color:#1f4fd812;font:900 26px 'Segoe UI',Arial;line-height:1.9;text-transform:uppercase;pointer-events:none;word-break:break-all;z-index:0}
+#bonusBanner{position:fixed;left:50%;top:30%;transform:translate(-50%,-50%) scale(.6);z-index:2500;background:linear-gradient(#ffe98a,#f4b400);border:4px solid #b07a00;border-radius:20px;padding:14px 28px;font:900 34px 'Segoe UI',Arial;color:#5a3b00;box-shadow:0 10px 40px #0007;opacity:0;pointer-events:none;text-align:center}
+#bonusBanner.on{animation:bban 2s forwards}@keyframes bban{15%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}30%{transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-60%) scale(1)}}
+.func{display:inline-block;margin-top:2px;background:#e8efff;border:1.5px solid #1f4fd8;color:#1f4fd8;border-radius:99px;padding:1px 10px;font:800 13px 'Segoe UI',Arial}
+@media print{body>*:not(#holerite){display:none!important}#holerite{position:static;background:none;display:block!important}.hbt{display:none}}
+</style>
 <script>
 (function(){
 /* ---------- dinheiro ---------- */
@@ -167,7 +204,7 @@ window.BILLSET=new Set(BILLS);
 const $=id=>document.getElementById(id);
 let fi=0,ti=0,pts=0,tasks=[],zone=[],showSum=false,tries=0,lock=false;
 const zoneEl=$('zone');
-function setPts(d){pts=Math.max(0,pts+d);$('pts').textContent=pts+' pontos';if(d){const f=document.createElement('div');f.className='fly';f.textContent=(d>0?'+':'')+d;f.style.color=d>0?'#0f9d58':'#d93025';const r=$('pts').getBoundingClientRect();f.style.left=(r.left+r.width/2)+'px';f.style.top=(r.bottom+4)+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),1100)}}
+function setPts(d){pts=Math.max(0,pts+d);$('pts').textContent=pts+' moedas';if(d){const f=document.createElement('div');f.className='fly';f.textContent=(d>0?'+':'')+d;f.style.color=d>0?'#0f9d58':'#d93025';const r=$('pts').getBoundingClientRect();f.style.left=(r.left+r.width/2)+'px';f.style.top=(r.bottom+4)+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),1100)}}
 function dots(){const d=$('dots');d.innerHTML='';tasks.forEach((_,i)=>{const x=document.createElement('i');x.className=i<ti?'d':i===ti?'c':'';d.appendChild(x)})}
 function sum(){return zone.reduce((a,b)=>a+b,0)}
 function renderZone(){zoneEl.innerHTML='';if(!zone.length){zoneEl.innerHTML='<div class="vazio">Arraste as moedas e cédulas até aqui<br>(ou clique nelas)</div>'}
@@ -184,12 +221,12 @@ function task(){lock=false;const t=tasks[ti];zone=[];tries=0;$('msg').textConten
 function fase(){tasks=FASES[fi].gen();ti=0;$('inst').innerHTML=FASES[fi].i;task()}
 function conferir(){if(lock||!zone.length){if(!zone.length){$('msg').textContent='Coloque dinheiro na carteira primeiro.';$('msg').className='msg bad'}return}
  const t=tasks[ti],s=sum();tries++;const r=$('res2'),r1=$('res1');
- if(s===t.target){lock=true;setPts(15);kaching();r.textContent=r1.textContent='✔';r.className=r1.className='res on ok';$('msg').textContent='Muito bem! '+fmt(t.target)+(t.paid?' de troco.':' certinho.');$('msg').className='msg good';
+ if(s===t.target){lock=true;acerto();kaching();r.textContent=r1.textContent='✔';r.className=r1.className='res on ok';$('msg').textContent='Muito bem! '+fmt(t.target)+(t.paid?' de troco.':' certinho.');$('msg').className='msg good';
   setTimeout(()=>{ti++;if(ti>=tasks.length)fimFase();else task()},1500)}
- else{setPts(-10);buzz();r.textContent='✘';r.className='res on bad';zoneEl.classList.add('shake');setTimeout(()=>{r.className='res';zoneEl.classList.remove('shake')},900);
+ else{erro();buzz();r.textContent='✘';r.className='res on bad';zoneEl.classList.add('shake');setTimeout(()=>{r.className='res';zoneEl.classList.remove('shake')},900);
   $('msg').textContent=s<t.target?'Ainda falta dinheiro. Confira a conta!':'Passou do valor. Tire alguma coisa!';$('msg').className='msg bad'}}
-function fimFase(){const f=$('fim');$('fT').textContent=fi<FASES.length-1?'Fase '+(fi+1)+' concluída! 🎉':'Parabéns! Terminou todas as fases! 🏆';$('fP').textContent='Você tem '+pts+' pontos.';
- $('fB').textContent=fi<FASES.length-1?'Próxima fase ▶':'Jogar de novo ↺';f.classList.add('on');$('fB').onclick=()=>{f.classList.remove('on');if(fi<FASES.length-1)fi++;else{fi=0;pts=0;setPts(0)}fase()}}
+function fimFase(){const f=$('fim');$('fT').textContent=fi<FASES.length-1?'Fase '+(fi+1)+' concluída! 🎉':'Parabéns! Terminou todas as fases! 🏆';$('fP').textContent='Você ganhou '+pts+' moedas de salário.';
+ $('fB').textContent=fi<FASES.length-1?'Próxima fase ▶':'Jogar de novo ↺';f.classList.add('on');if(fi===FASES.length-1){final=true;save();setTimeout(holerite,700)}$('fB').onclick=()=>{f.classList.remove('on');if(fi<FASES.length-1)fi++;else{fi=0;pts=0;setPts(0);acertos=erros=bonus=streak=0;final=false}save();fase()}}
 /* ---------- bandeja e arrastar ---------- */
 function bandeja(){COINS.forEach(v=>$('rowM').appendChild(tray(v)));BILLS.forEach(v=>$('rowC').appendChild(tray(v)))}
 function tray(v){const e=mny(v);let st=null,clone=null;
@@ -210,7 +247,28 @@ $('snd').onchange=()=>{mute=!$('snd').checked;if(!mute){ac();kaching()}};
 $('bCfg').onclick=()=>$('cfg').classList.toggle('on');
 $('sz').oninput=()=>document.documentElement.style.setProperty('--u',$('sz').value+'vh');
 $('zm').oninput=()=>document.documentElement.style.setProperty('--zm',$('zm').value/100);
-bandeja();fase();
+
+/* ---------- funcionario: contrato, bonus, holerite ---------- */
+const KEY='folha_sessao';let nome='',turma='',inicio=0,acertos=0,erros=0,bonus=0,streak=0,final=false;
+function save(){try{sessionStorage.setItem(KEY,JSON.stringify({nome:nome,turma:turma,inicio:inicio,acertos:acertos,erros:erros,bonus:bonus,streak:streak,pts:pts,fi:fi,final:final}))}catch(e){}}
+function aviso(t){const b=$('bonusBanner');b.textContent=t;b.classList.remove('on');void b.offsetWidth;b.classList.add('on')}
+function acerto(){setPts(15);acertos++;streak++;if(streak%3===0){const b=streak>=9?60:streak>=6?45:30;bonus+=b;setTimeout(()=>{setPts(b);aviso('🎁 Bônus de sequência! +'+b+' moedas');kaching()},650)}save()}
+function erro(){setPts(-10);erros++;streak=0;save()}
+function cod(t){let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619)}const x=(h>>>0).toString(16).toUpperCase().padStart(8,'0');return x.slice(0,4)+'-'+x.slice(4)}
+function holerite(){const agora=new Date(),q=agora.toLocaleDateString('pt-BR')+' às '+agora.toLocaleTimeString('pt-BR');
+ $('hTipo').textContent=final?'(FINAL)':'(parcial)';$('hNome').textContent=nome;$('hSub').textContent='Turma '+(turma||'—')+' · início '+new Date(inicio).toLocaleTimeString('pt-BR');
+ $('hA').textContent=acertos;$('hE').textContent=erros;$('hBase').textContent='+ '+acertos*15;$('hBon').textContent='+ '+bonus;$('hDesc').textContent='− '+erros*10;$('hTot').textContent=pts;
+ $('hCod').textContent=cod([nome,turma,pts,acertos,erros,bonus,inicio,q].join('|'));$('hQuando').textContent=q;
+ $('hmark').textContent=(nome+'   ').repeat(120);$('holerite').classList.add('on')}
+$('hFecha').onclick=()=>$('holerite').classList.remove('on');$('hPrint').onclick=()=>window.print();
+$('bCfg').insertAdjacentHTML('beforebegin','<button class="btn" id="bHol" type="button">💰 Holerite</button>');$('bHol').onclick=holerite;
+function iniciar(){$('contrato').classList.remove('on');$('sub').insertAdjacentHTML('afterend','<div class="func" id="func">👷 '+nome.replace(/</g,'')+(turma?' · '+turma.replace(/</g,''):'')+'</div>');setPts(0);save()}
+let S=null;try{S=JSON.parse(sessionStorage.getItem(KEY)||'null')}catch(e){}
+if(S&&S.nome){nome=S.nome;turma=S.turma||'';inicio=S.inicio;acertos=S.acertos;erros=S.erros;bonus=S.bonus;streak=S.streak||0;pts=S.pts||0;fi=S.fi||0;final=!!S.final;bandeja();fase();iniciar()}
+else{$('contrato').classList.add('on');
+ $('cOk').onclick=()=>{const n=$('cNome').value.trim().replace(/\s+/g,' ');if(n.length<5||n.indexOf(' ')<0){$('cErr').textContent='Digite o nome e o sobrenome.';return}
+  nome=n;turma=$('cTurma').value.trim();inicio=Date.now();bandeja();fase();iniciar()};
+ $('cNome').focus()}
 })();
 </script>
 </body>
