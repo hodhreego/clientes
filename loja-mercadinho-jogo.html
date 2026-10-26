@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Padaria - Pagando o Valor Exato</title>
+<title>Mercadinho - Compras e Troco</title>
 <style>
 :root{--u:8.4vh;--ink:#1b2440;--brand:#1f4fd8;--ok:#0f9d58;--bad:#d93025}
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
@@ -102,13 +102,13 @@ html,body{margin:0;height:100%;overflow:hidden;background:#eef3fb;font-family:"S
 <body>
 <div id="app">
  <div class="top">
-  <div><h1>🥖 Na <span>Padaria</span></h1><div class="sub" id="sub"></div></div>
+  <div><h1>🛒 No <span>Mercadinho</span></h1><div class="sub" id="sub"></div></div>
   <div class="coin"><i>$</i><span id="pts">0 pontos</span></div>
   <div class="btns"><div class="dots" id="dots"></div><button class="btn sec" id="bCfg">⚙ Ajustes</button></div>
  </div>
  <div class="inst" id="inst"></div>
  <div class="main">
-  <div class="card" id="cLoja"><h2>🛒 Loja</h2><div class="prods" id="prods"></div><div id="extra"></div><div class="res" id="res1"></div></div>
+  <div class="card" id="cLoja"><h2>🛒 Mercadinho</h2><div class="prods" id="prods"></div><div id="extra"></div><div class="res" id="res1"></div></div>
   <div class="card" id="cCart"><h2><span id="zt">👛 Sua carteira</span><span class="soma hide" id="soma">soma escondida</span></h2>
    <div class="zone" id="zone"></div>
    <div class="acoes"><div class="msg" id="msg"></div><button class="btn sec" id="bLimpar">🗑 Limpar</button><button class="btn sec" id="bSoma">👁 Ver soma</button><button class="btn ok" id="bOk">Conferir ✔</button></div>
@@ -137,20 +137,25 @@ function mny(v,mini){const e=document.createElement('div');e.className='m';e.dat
  if(mini)e.style.setProperty('--h',b?'calc(var(--u)*.95)':`calc(var(--u)*${(k*.95).toFixed(2)})`);
  e.innerHTML=b?billSvg(v):coinSvg(v);return e}
 /* ---------- tarefas ---------- */
-const PROD=[['🍎','Maçã'],['🍌','Bananas'],['🍪','Biscoito'],['🥛','Leite'],['🍫','Chocolate'],['🧃','Suco'],['🍞','Pão'],['🍦','Sorvete'],['✏️','Lápis'],['📓','Caderno'],['🖍️','Giz de cera'],['✂️','Tesoura'],['🎈','Balão'],['🧸','Ursinho'],['🍕','Pizza'],['🥤','Refrigerante'],['🍇','Uvas'],['🍩','Rosquinha'],['🎒','Mochila'],['⚽','Bola']];
+const STORE=[["🍚", "Arroz 5 kg", 2800], ["🫘", "Feijão", 800], ["🥛", "Leite", 600], ["🥚", "Ovos (dúzia)", 1400], ["🍌", "Bananas", 600], ["🍅", "Tomates", 800], ["🍝", "Macarrão", 500], ["🛢️", "Óleo de soja", 800], ["🧂", "Sal", 300], ["🍬", "Açúcar", 500], ["🍗", "Frango", 1800], ["🥩", "Carne moída", 3500], ["🧻", "Papel higiênico", 2000], ["🥤", "Refrigerante", 900], ["🧼", "Sabão", 700], ["🍪", "Biscoito", 400]];
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const pick=a=>a[rnd(0,a.length-1)];
 function prods(n){const a=[];while(a.length<n){const p=pick(PROD);if(!a.includes(p))a.push(p)}return a}
 const mk=(arr,fn)=>{const out=[],seen=new Set();let g=0;while(out.length<8&&g++<500){const t=fn(out.length);if(seen.has(t.total+'|'+(t.paid||0)))continue;seen.add(t.total+'|'+(t.paid||0));out.push(t)}return out};
 const pay=(pp,paid)=>{const it=prods(pp.length).map((p,i)=>({e:p[0],n:p[1],p:pp[i]}));const total=pp.reduce((a,b)=>a+b,0);return {items:it,total,paid:paid||0,target:paid?paid-total:total}};
 const m5=(a,b)=>rnd(a/5,b/5)*5, q25=(a,b)=>rnd(a/25,b/25)*25;
+const buy=(k,paid)=>{const cap=paid?9900:30000;for(let g=0;g<300;g++){const sel=[];while(sel.length<k){const p=pick(STORE);if(!sel.includes(p))sel.push(p)}
+ const items=sel.map(p=>{const b=p[2],st=b>=1000?100:25;const v=Math.max(st,Math.round(b*(0.9+Math.random()*0.2)/st)*st);return {e:p[0],n:p[1],p:v}});
+ const total=items.reduce((a,b)=>a+b.p,0);if(total>cap)continue;let pd=0;
+ if(paid){const bs=[200,500,1000,2000,5000,10000].filter(x=>x>total);if(!bs.length)continue;pd=bs[0];if(k===1&&bs[1]&&Math.random()<.4)pd=bs[1]}
+ return {items,total,paid:pd,target:pd?pd-total:total}}return buy(1,0)};
 const FASES=[
- {t:'Pãozinho e café',s:'Fase 1 — valores pequenos',i:'<b>Pague o valor exato</b> com moedas e cédulas de R$ 2 e R$ 5.',gen:()=>mk(0,()=>pay([m5(105,995)]))},
- {t:'Lanche da padaria',s:'Fase 2 — com centavos',i:'<b>Pague o valor exato</b> do lanche. Atenção aos centavos!',gen:()=>mk(0,()=>pay([rnd(10,60)*100+pick([25,50,75,5,10,15,35,45,95])]))},
- {t:'Dois itens',s:'Fase 3 — some e pague',i:'<b>Some os dois preços</b> e pague o total exato.',gen:()=>mk(0,()=>pay([q25(150,1800),q25(150,1800)]))},
- {t:'Compras da semana',s:'Fase 4 — três itens',i:'<b>Some os três preços</b> e monte o valor exato na carteira.',gen:()=>mk(0,()=>pay([q25(200,2200),q25(200,2200),q25(200,2200)]))},
- {t:'Compras grandes',s:'Fase 5 — valores acima de R$ 100',i:'<b>Pague valores maiores</b> com cédulas de R$ 100, R$ 50 e R$ 20.',gen:()=>mk(0,()=>pay([q25(11025,29975)]))},
- {t:'Mistura final',s:'Fase 6 — pague o valor exato',i:'<b>Desafio!</b> Pague exatamente com o menor número de cédulas e moedas que conseguir.',gen:()=>mk(0,()=>pay([q25(2025,9975)]))}
+ {t:'Um produto',s:'Fase 1 — pague o valor exato',i:'<b>Você é o cliente em: Mercadinho.</b> Arraste as cédulas e moedas para pagar <b>exatamente</b> o preço do produto.',gen:()=>mk(0,()=>buy(1,0))},
+ {t:'Dois produtos',s:'Fase 2 — some e pague',i:'<b>Some os preços dos dois produtos</b> e pague o total exato na carteira.',gen:()=>mk(0,()=>buy(2,0))},
+ {t:'Três produtos',s:'Fase 3 — some três preços',i:'<b>Some os três preços</b> e monte o valor certinho.',gen:()=>mk(0,()=>buy(3,0))},
+ {t:'Receba o troco',s:'Fase 4 — um produto, pagou com cédula',i:'<b>O cliente pagou com a cédula mostrada.</b> Entregue o <b>troco</b>: troco = pagou − preço.',gen:()=>mk(0,()=>buy(1,1))},
+ {t:'Dois produtos e troco',s:'Fase 5 — some e dê o troco',i:'<b>Some os dois produtos</b>, veja com que cédula o cliente pagou e <b>entregue o troco</b>.',gen:()=>mk(0,()=>buy(2,1))},
+ {t:'Compra grande',s:'Fase 6 — três produtos e troco',i:'<b>Três produtos!</b> Some tudo, depois calcule o troco da cédula usada.',gen:()=>mk(0,()=>buy(3,1))}
 ];
 
 /* ---------- sons ---------- */
