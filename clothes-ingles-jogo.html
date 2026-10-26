@@ -439,4 +439,19 @@ document.getElementById("abrir").onclick=()=>document.getElementById("painel").c
  },true);
 })();
 </script>
+<script id="som">
+(function(){
+ var ac=null;
+ function ctx(){try{if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume()}catch(e){}return ac}
+ function tone(f,t0,d,type,vol){var c=ctx();if(!c)return;var o=c.createOscillator(),g=c.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,c.currentTime+t0);g.gain.setValueAtTime(0.0001,c.currentTime+t0);g.gain.exponentialRampToValueAtTime(vol||.25,c.currentTime+t0+.01);g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+t0+d);o.connect(g);g.connect(c.destination);o.start(c.currentTime+t0);o.stop(c.currentTime+t0+d+.05)}
+ function moeda(){tone(988,0,.09,'square',.12);tone(1319,.08,.35,'square',.12);tone(1319,.08,.35,'sine',.22);tone(2637,.1,.25,'sine',.06)}
+ function erro(){tone(220,0,.18,'sawtooth',.12);tone(165,.14,.25,'sawtooth',.12)}
+ window.somMoeda=moeda;window.somErro=erro;
+ document.addEventListener('pointerdown',ctx,true);
+ new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){
+  if(n.nodeType!==1||!n.classList||!n.classList.contains('jres'))return;
+  if(n.classList.contains('ok'))moeda();else if(n.classList.contains('no'))erro()})})}).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+<style id="som-css">.jres.ok svg path{stroke:#16a34a!important}.jc.ok{border-color:#16a34a!important}.jc.ok::after{filter:none}</style>
 </body></html>
