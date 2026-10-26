@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Jogos de Matemática</title>
+<title>Jogos de Matemática e Inglês</title>
 <style>
 :root{--bg:#f4f7fc;--surface:#fff;--ink:#16213a;--muted:#5b6785;--line:#dbe3f1;--brand:#1f4fd8;--brand2:#ff7a1a;color-scheme:light}
 @media (prefers-color-scheme:dark){:root{--bg:#0e1424;--surface:#18203a;--ink:#eef2fc;--muted:#a3afcf;--line:#2a3558;--brand:#6c93ff;--brand2:#ff9a4d;color-scheme:dark}}
@@ -43,7 +43,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:0 16px 40px}
 </head>
 <body>
 <div class="hero"><div class="in">
-<h1>🎲 Jogos de Matemática</h1>
+<h1>🎲 Jogos de Matemática e Inglês</h1>
 <p>Arraste a resposta até o cartão certo, ganhe moedas e avance de fase. Funciona no computador e no Chromebook.</p>
 <div class="badges"><span>🖱️ Arrastar ou clicar</span><span>⏱️ 10 segundos para conferir</span><span>🪙 +15 por acerto</span></div>
 </div>
@@ -64,6 +64,7 @@ const TEMAS=[
  {id:'fracoes',nome:'Frações',icon:'🍕',cor:'#e8590c',desc:'Da figura pintada às contas com frações.'},
  {id:'dinheiro',nome:'Dinheiro',icon:'💰',cor:'#0f9d58',desc:'Contar moedas e cédulas, somar compras e dar o troco.'},
  {id:'porcentagem',nome:'Porcentagem',icon:'🔟',cor:'#c2185b',desc:'50%, 10% e 25%: metade, décima parte e um quarto, até os descontos da loja.'},
+ {id:'ingles',nome:'Inglês',icon:'🇬🇧',cor:'#0b7285',desc:'Vocabulário e gramática: ligue a frase ou o número à figura certa.'},
  {id:'algebra',nome:'Álgebra',icon:'🔤',cor:'#7c3aed',desc:'Incógnitas, termos semelhantes e expressões.'}
 ];
 const JOGOS=[
@@ -74,6 +75,9 @@ const JOGOS=[
  {tema:'dinheiro',emoji:'🪙',titulo:'Dando o Troco',desc:'Troco de R$ 5, R$ 10, R$ 20, R$ 50 e R$ 100, até as compras com dois produtos. 6 fases.',serie:'6º ano',fases:6,href:'troco-jogo.html'},
  {tema:'dinheiro',emoji:'💵',titulo:'Contagem de Dólares',desc:'Moedas (cents) e notas (bills) americanas: pagar, somar compras e dar o troco em dólares. 6 fases.',serie:'6º ao 8º ano',fases:6,href:'contagem-dolares-jogo.html'},
  {tema:'porcentagem',emoji:'🔟',titulo:'Porcentagem Fácil',desc:'50% (metade), 10% (dividir por 10) e 25% (um quarto), misturas e descontos em reais. 6 fases.',serie:'6º ano',fases:6,href:'porcentagem-jogo.html'},
+ {tema:'ingles',emoji:'🏃',titulo:'Phrasal Verbs',desc:'Ligue cada phrasal verb à figura que o representa. Arraste ou clique.',serie:'8º ano',href:'phrasal-verbs-jogo.html'},
+ {tema:'ingles',emoji:'📍',titulo:'Prepositions of Place',desc:'in, on, under, next to, between... ligue a frase à figura certa.',serie:'6º ano',href:'preposicoes-de-lugar-jogo.html'},
+ {tema:'ingles',emoji:'🔢',titulo:'English Numbers',desc:'Números cardinais e ordinais em inglês: ligue o número escrito à sua forma.',serie:'6º ano',href:'numbers-ingles-jogo.html'},
  {tema:'algebra',emoji:'🔢',titulo:'Álgebra com letras',desc:'Já está nas fases 2 e 5 do jogo Soma de Inteiros. Uma versão só de álgebra vem aí.',serie:'7º ano',soon:true}
 ];
 let filtro='todos';
