@@ -62,6 +62,42 @@ html,body{margin:0;height:100%;overflow:hidden;background:#eef3fb;font-family:"S
 #cfg.on{display:block}#cfg label{display:block;margin:.8vh 0 .2vh;font-weight:700}#cfg input[type=range]{width:100%}
 .prods.many .prod{min-width:12.5vw;padding:.7vh .7vw}.prods.many .e{font-size:8.2vh}.prods.many .n{font-size:2vh}.prods.many .tag{font-size:3.6vh}.prods.many{gap:.9vh .7vw}
 </style>
+<style id="movel">
+@media screen and (max-width:820px){
+ :root{--u:9.6vw}
+ html{height:auto!important;overflow:auto!important}body{height:auto!important;overflow:visible!important}
+ #app{height:auto!important;min-height:100vh;padding:8px!important;gap:8px!important}
+ .top{flex-wrap:wrap;gap:6px 8px}
+ .top h1{font-size:22px!important}.sub{font-size:12px!important}
+ .coin{order:3;margin:0 auto!important;font-size:21px!important;padding:2px 14px 2px 5px!important}
+ .coin i{width:28px!important;height:28px!important;font-size:17px!important}
+ .btns{margin-left:auto;gap:6px}.btn{font-size:13px!important;padding:6px 10px!important}.btn.ok{font-size:16px!important;padding:9px 20px!important}
+ .dots i{width:10px!important;height:10px!important}
+ .inst{font-size:14px!important;padding:6px 8px!important}
+ .main{grid-template-columns:1fr!important;flex:none!important}
+ .card{padding:10px!important}.card h2{font-size:15px!important;flex-wrap:wrap}
+ .prods{gap:8px!important}.prod{min-width:92px!important;padding:6px 10px!important}
+ .prod .e{font-size:46px!important}.prod .n{font-size:16px!important}.tag{font-size:22px!important}
+ .prods.many .prod{min-width:78px!important;padding:5px 6px!important}.prods.many .e{font-size:34px!important}.prods.many .n{font-size:13px!important}.prods.many .tag{font-size:17px!important}
+ .paid{font-size:15px!important;margin-top:8px!important}.alvo{font-size:18px!important}.alvo small{font-size:14px!important}
+ .zone{min-height:120px;flex:none!important;padding:8px!important}.zone .vazio{font-size:15px!important}
+ .soma{font-size:18px!important}.soma.hide{font-size:13px!important}
+ .acoes{flex-wrap:wrap;gap:6px!important}.msg{flex-basis:100%;font-size:14px!important}
+ .tray{position:sticky;bottom:0;z-index:40;padding:6px!important;margin:0 -2px;box-shadow:0 -8px 14px #0003;border-radius:12px 12px 0 0!important}
+ .row{flex-wrap:wrap;gap:6px!important}.row .lbl{width:auto!important;font-size:12px!important;text-align:left!important}
+ #cfg{width:84vw!important;right:8px!important;top:48px!important;font-size:14px!important}
+ .res{font-size:110px!important}
+ .fim .box{max-width:90vw!important;padding:24px 18px!important}.fim h2{font-size:26px!important}.fim p{font-size:16px!important}
+}
+@media screen and (min-width:821px) and (max-height:520px){
+ :root{--u:15vh}
+ html{height:auto!important;overflow:auto!important}body{height:auto!important;overflow:visible!important}
+ #app{height:auto!important;min-height:100vh}
+ .main{flex:none!important}
+ .zone{min-height:34vh}
+ .prod .e{font-size:42px!important}.tag{font-size:20px!important}.prod .n{font-size:15px!important}
+}
+</style>
 </head>
 <body>
 <div id="app">
